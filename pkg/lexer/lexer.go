@@ -54,9 +54,7 @@ func (l *Lexer) NextToken() token.Token {
 	case '=':
 		// Check if the next character is also an '='
 		if l.peekChar() == '=' {
-			ch := l.ch
-			l.readChar()
-			tok = token.Token{Type: token.EQ, Literal: string(ch) + string(l.ch)}
+			tok = l.makeTwoCharToken(token.EQ)
 		} else {
 			tok = newToken(token.ASSIGN, l.ch)
 		}
@@ -65,10 +63,9 @@ func (l *Lexer) NextToken() token.Token {
 	case '-':
 		tok = newToken(token.MINUS, l.ch)
 	case '!':
+		// Check if the next character is an '='
 		if l.peekChar() == '=' {
-			ch := l.ch
-			l.readChar()
-			tok = token.Token{Type: token.NOT_EQ, Literal: string(ch) + string(l.ch)}
+			tok = l.makeTwoCharToken(token.NOT_EQ)
 		} else {
 			tok = newToken(token.BANG, l.ch)
 		}
@@ -142,6 +139,13 @@ func (l *Lexer) readIdentifier() string {
 
 	// Return the identifier that we've read so far.
 	return l.input[position:l.position]
+}
+
+func (l *Lexer) makeTwoCharToken(tokenType token.Type) token.Token {
+	ch := l.ch
+	l.readChar()
+
+	return token.Token{Type: tokenType, Literal: string(ch) + string(l.ch)}
 }
 
 func isLetter(ch byte) bool {
