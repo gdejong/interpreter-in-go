@@ -1,6 +1,6 @@
 // Package lexer implements a lexer for the Monkey programming language.
 // This lexer only supports ASCII characters, not the full Unicode character set.
-// In order to do that Lexer.ch would need to be rune instead of byte, and the way of reading characters
+// In order to do that Lexer.ch would need to be a rune instead of a byte, and the way of reading characters
 // would need to change (since characters could take up multiple bytes in Unicode).
 package lexer
 
